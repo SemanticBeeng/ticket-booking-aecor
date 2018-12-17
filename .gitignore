@@ -10,6 +10,9 @@ target/
 lib_managed/
 src_managed/
 project/boot/
+project/.boot/
+project/.ivy/
+project/.sbtboot/
 project/plugins/project/
 .DS_Store
 
