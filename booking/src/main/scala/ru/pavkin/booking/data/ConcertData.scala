@@ -1,6 +1,7 @@
-package ru.pavkin.booking
-import ru.pavkin.booking.booking.service.StubConfirmationService.ConcertState
-import ru.pavkin.booking.common.models.{ ConcertId, Money, Seat }
+package ru.pavkin.booking.data
+
+import ru.pavkin.booking.common.models.{ConcertId, Money, Seat}
+import ru.pavkin.booking.booking.entity.ConcertState
 
 object ConcertData {
 

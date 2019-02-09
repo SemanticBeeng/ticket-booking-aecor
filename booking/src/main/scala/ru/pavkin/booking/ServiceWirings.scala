@@ -1,8 +1,9 @@
 package ru.pavkin.booking
 
-import cats.effect.{ Clock, Sync }
+import cats.effect.{Clock, Sync}
 import cats.syntax.functor._
-import ru.pavkin.booking.booking.service.{ TicketReservationService, StubConfirmationService }
+import ru.pavkin.booking.booking.service.{StubConfirmationService, TicketReservationService}
+import ru.pavkin.booking.data.ConcertData
 
 final class ServiceWirings[F[_]: Sync](val confirmationService: TicketReservationService[F])
 
