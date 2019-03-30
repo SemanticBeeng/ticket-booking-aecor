@@ -6,8 +6,11 @@ lazy val aecorVersion = "0.18.0"
 lazy val aecorPostgresVersion = "0.3.0"
 lazy val akkaVersion = "2.5.18"
 lazy val boopickleVerison = "1.3.0"
+lazy val catsVersion = "1.6.0"
 lazy val catsMTLVersion = "0.4.0"
-lazy val catsVersion = "1.4.0"
+lazy val catsEffectVersion = "1.2.0"
+lazy val catsTaglessVersion = "0.2.0"
+
 lazy val log4CatsVersion = "0.2.0"
 lazy val circeDerivationVersion = "0.10.0-M1"
 lazy val circeVersion = "0.10.1"
@@ -21,9 +24,10 @@ lazy val shapelessVersion = "2.3.3"
 lazy val http4sVersion = "0.20.0-M3"
 lazy val enumeratumVersion = "1.5.13"
 
-lazy val simulacrum = "com.github.mpilquist" %% "simulacrum" % "0.12.0"
+//lazy val simulacrum = "com.github.mpilquist" %% "simulacrum" % "0.12.0"
 lazy val kindProjector = compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
 lazy val betterMonadicFor = addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.2.4")
+lazy val scalametaParadisePlugin = compilerPlugin("org.scalameta" % "paradise" % metaParadiseVersion cross CrossVersion.full)
 lazy val scalapbRuntime = "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
 
 lazy val booking = (project in file("booking"))
@@ -33,7 +37,7 @@ lazy val booking = (project in file("booking"))
     fork := true,
     libraryDependencies ++= Seq(
       kindProjector,
-      compilerPlugin("org.scalameta" % "paradise" % metaParadiseVersion cross CrossVersion.full),
+      scalametaParadisePlugin,
       "ch.qos.logback" % "logback-classic" % logbackVersion,
       scalapbRuntime,
       "com.beachape" %% "enumeratum" % enumeratumVersion,
@@ -68,7 +72,7 @@ lazy val booking = (project in file("booking"))
       "com.github.pureconfig" %% "pureconfig-http4s" % pureConfigVersion,
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test
-    ),
+    ) ++ catsLibs,
     scalacOptions += "-Xplugin-require:macroparadise",
     sources in(Compile, doc) := Nil, // macroparadise doesn't work with scaladoc yet.
     mainClass in Compile := Some("ru.pavkin.booking.App"),
@@ -77,6 +81,19 @@ lazy val booking = (project in file("booking"))
     ),
   )
   .enablePlugins(DockerPlugin, JavaAppPackaging)
+
+   lazy val catsLibs =
+    Seq("org.typelevel" %% "cats-core",
+        "org.typelevel" %% "cats-free",
+        "org.typelevel" %% "cats-kernel",
+        "org.typelevel" %% "cats-laws",
+        "org.typelevel" %% "cats-macros",
+        "org.typelevel" %% "cats-testkit").map(_ % catsVersion)  ++
+    Seq("org.typelevel" %% "cats-effect").map(_ % catsEffectVersion) ++
+    Seq("org.typelevel" %% "cats-mtl-core").map(_ % catsMTLVersion) ++
+    Seq("org.typelevel" %% "cats-tagless-core",
+        "org.typelevel" %% "cats-tagless-laws",
+        "org.typelevel" %% "cats-tagless-macros").map(_ % catsTaglessVersion)
 
 lazy val baseSettings = Seq(
   scalaVersion in ThisBuild := "2.12.7",

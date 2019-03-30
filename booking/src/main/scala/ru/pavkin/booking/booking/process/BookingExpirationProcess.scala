@@ -8,11 +8,11 @@ import ru.pavkin.booking.booking.booking.Bookings
 import ru.pavkin.booking.booking.view.BookingViewRepository
 
 class BookingExpirationProcess[F[_]: Sync](bookings: Bookings[F],
-                                            bookingView: BookingViewRepository[F])
+                                           bookingViewRepo: BookingViewRepository[F])
     extends (Instant => F[Unit]) {
 
   def apply(now: Instant): F[Unit] =
-    bookingView
+    bookingViewRepo
       .expired(now)
       .evalMap(k => bookings(k).expire.void)
       .compile
